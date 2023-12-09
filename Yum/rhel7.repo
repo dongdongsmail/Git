@@ -1,0 +1,5 @@
+[RHEL7]
+name = Red Hat Enterprise Linux 7
+baseurl = file:///mnt/iso
+enabled = 1
+gpgcheck = 0
