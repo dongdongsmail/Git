@@ -138,6 +138,8 @@ chrony_install() {
 
     if [[ "${ID}" == "centos" ]]; then
         systemctl enable chronyd && systemctl restart chronyd
+    elif [[ "${ID}" == "rhel" ]]; then
+        systemctl enable chronyd && systemctl restart chronyd
     else
         systemctl enable chrony && systemctl restart chrony
     fi
