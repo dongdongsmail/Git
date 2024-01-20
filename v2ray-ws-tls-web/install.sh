@@ -173,12 +173,17 @@ dependency_install() {
 
     if [[ "${ID}" == "centos" ]]; then
         ${INS} -y install crontabs
+    elif [[ "${ID}" == "rhel" ]]; then
+        ${INS} -y install crontabs
     else
         ${INS} -y install cron
     fi
     judge "安装 crontab"
 
     if [[ "${ID}" == "centos" ]]; then
+        touch /var/spool/cron/root && chmod 600 /var/spool/cron/root
+        systemctl start crond && systemctl enable crond
+    elif [[ "${ID}" == "rhel" ]]; then
         touch /var/spool/cron/root && chmod 600 /var/spool/cron/root
         systemctl start crond && systemctl enable crond
     else
@@ -202,12 +207,16 @@ dependency_install() {
 
     if [[ "${ID}" == "centos" ]]; then
         ${INS} -y groupinstall "Development tools"
+    elif [[ "${ID}" == "rhel" ]]; then
+        ${INS} -y groupinstall "Development tools"
     else
         ${INS} -y install build-essential
     fi
     judge "编译工具包 安装"
 
     if [[ "${ID}" == "centos" ]]; then
+        ${INS} -y install pcre pcre-devel zlib-devel epel-release
+    elif [[ "${ID}" == "rhel" ]]; then
         ${INS} -y install pcre pcre-devel zlib-devel epel-release
     else
         ${INS} -y install libpcre3 libpcre3-dev zlib1g-dev dbus
@@ -222,6 +231,11 @@ dependency_install() {
     #    sed -i -r '/^HRNGDEVICE/d;/#HRNGDEVICE=\/dev\/null/a HRNGDEVICE=/dev/urandom' /etc/default/rng-tools
 
     if [[ "${ID}" == "centos" ]]; then
+        #       systemctl start rngd && systemctl enable rngd
+        #       judge "rng-tools 启动"
+        systemctl start haveged && systemctl enable haveged
+        #       judge "haveged 启动"
+    elif [[ "${ID}" == "rhel" ]]; then
         #       systemctl start rngd && systemctl enable rngd
         #       judge "rng-tools 启动"
         systemctl start haveged && systemctl enable haveged
@@ -432,6 +446,8 @@ nginx_install() {
 
 ssl_install() {
     if [[ "${ID}" == "centos" ]]; then
+        ${INS} install socat nc -y
+    elif [[ "${ID}" == "rhel" ]]; then
         ${INS} install socat nc -y
     else
         ${INS} install socat netcat -y
