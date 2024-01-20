@@ -261,6 +261,9 @@ basic_optimization() {
     if [[ "${ID}" == "centos" ]]; then
         sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
         setenforce 0
+    elif [[ "${ID}" == "rhel" ]]; then
+        sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+        setenforce 0
     fi
 
 }
