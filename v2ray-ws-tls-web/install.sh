@@ -615,12 +615,12 @@ nginx_conf_add() {
         proxy_set_header Early-Data \$ssl_early_data;
         }
 }
-#    server {
-#        listen 80;
-#        listen [::]:80;
-#        server_name serveraddr.com;
-#        return 301 https://use.shadowsocksr.win\$request_uri;
-#    }
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name serveraddr.com;
+        return 301 https://use.shadowsocksr.win\$request_uri;
+    }
 EOF
 
     modify_nginx_port
